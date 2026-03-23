@@ -56,6 +56,10 @@ input,textarea,select{font-family:inherit;}
 .card-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s;}
 .mcard:hover .card-img-wrap img{transform:scale(1.04);}
 .img-credit{position:absolute;bottom:7px;left:9px;font-size:10px;color:rgba(255,255,255,.75);background:rgba(0,0,0,.3);padding:2px 7px;border-radius:4px;backdrop-filter:blur(3px);pointer-events:none;}
+.bet-badge{position:absolute;top:9px;left:9px;display:flex;align-items:center;gap:5px;padding:4px 9px 4px 7px;border-radius:20px;font-size:11px;font-weight:700;backdrop-filter:blur(6px);pointer-events:none;line-height:1;}
+.bet-badge.sim{background:rgba(22,163,74,.85);color:#fff;}
+.bet-badge.nao{background:rgba(220,38,38,.85);color:#fff;}
+.bet-badge-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.7);flex-shrink:0;}
 .featured-body{padding:20px 24px 18px;}
 .featured-head{display:flex;align-items:flex-start;gap:10px;margin-bottom:16px;}
 .featured-title{font-size:18px;font-weight:700;line-height:1.3;}
@@ -446,8 +450,14 @@ function AuthProvider({ children }) {
 
   const isSaved = (id) => saved.includes(id);
 
+  const getUserBet = (marketId) => {
+    if (!user) return null;
+    const bets = JSON.parse(localStorage.getItem(`bttv_bets_${user.id}`) || "[]");
+    return bets.find(b => b.marketId === marketId) || null;
+  };
+
   return (
-    <AuthCtx.Provider value={{ user, coins, register, login, logout, updateProfile, placeBet, toggleSave, isSaved }}>
+    <AuthCtx.Provider value={{ user, coins, register, login, logout, updateProfile, placeBet, toggleSave, isSaved, getUserBet }}>
       {children}
     </AuthCtx.Provider>
   );
@@ -490,6 +500,20 @@ function CardImg({ src, credit, height }) {
       }
       {!err && credit && <span className="img-credit">Foto: {credit}</span>}
     </div>
+  );
+}
+
+/* inner version — no wrapper div (card owns it for badge overlay) */
+function CardImgInner({ src, credit }) {
+  const [err, setErr] = useState(false);
+  return (
+    <>
+      {!err && src
+        ? <img src={src} alt="" onError={()=>setErr(true)} style={{width:"100%",height:"100%",objectFit:"cover",display:"block",transition:"transform .35s"}}/>
+        : <div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center",color:"var(--text3)"}}><IcoChart/></div>
+      }
+      {!err && credit && <span className="img-credit">Foto: {credit}</span>}
+    </>
   );
 }
 
@@ -799,9 +823,10 @@ function CatBar({ active, setActive }) {
 
 /* ─── MARKET CARD ───────────────────────────────────────── */
 function MarketCard({ market, onOpen, showToast }) {
-  const { user, toggleSave, isSaved } = useAuth();
+  const { user, toggleSave, isSaved, getUserBet } = useAuth();
   const cfg = CAT[market.cat]||CAT.politica;
-  const sv = isSaved(market.id);
+  const sv  = isSaved(market.id);
+  const bet = getUserBet(market.id);
   const opts = market.type==="binary" ? [{label:"Sim",pct:market.sim}] : market.opts.slice(0,4);
 
   const handleSave = (e) => {
@@ -813,7 +838,16 @@ function MarketCard({ market, onOpen, showToast }) {
 
   return (
     <div className="mcard" onClick={()=>onOpen(market,null)}>
-      <CardImg src={market.img} credit={market.credit} height={160}/>
+      {/* IMAGE WITH OPTIONAL BET BADGE */}
+      <div className="card-img-wrap" style={{height:160,background:"var(--border2)",position:"relative",overflow:"hidden"}}>
+        <CardImgInner src={market.img} credit={market.credit}/>
+        {bet && (
+          <div className={`bet-badge ${bet.position}`}>
+            <div className="bet-badge-dot"/>
+            {bet.position === "sim" ? "Sim" : "Nao"} · {bet.amount.toLocaleString("pt-BR")} moedas
+          </div>
+        )}
+      </div>
       <div className="mcard-body">
         <div className="mcard-head">
           <div className="mcard-icon" style={{background:cfg.bg,color:cfg.fg}}><cfg.Icon/></div>
