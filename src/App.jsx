@@ -55,7 +55,18 @@ input,textarea{cursor:text;}
 .page-title-row{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px;flex-wrap:wrap;gap:10px;}
 
 /* ── GRID ── */
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
+
+/* ── CATEGORY LAYOUT (sidebar + main) ── */
+.cat-layout{display:grid;grid-template-columns:200px 1fr;gap:0;align-items:start;}
+.cat-sidebar{background:var(--white);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;position:sticky;top:112px;}
+.cat-sidebar-title{font-size:13px;font-weight:700;color:var(--text);padding:14px 16px 10px;}
+.sub-item{display:flex;align-items:center;justify-content:space-between;padding:7px 16px;font-size:13px;color:var(--text2);cursor:pointer;transition:background .12s,color .12s;border:none;background:none;width:100%;text-align:left;}
+.sub-item:hover{background:var(--bg);color:var(--text);}
+.sub-item.active{background:var(--blue-l);color:var(--blue);font-weight:600;}
+.sub-count{font-size:12px;color:var(--text3);font-weight:400;}
+.sub-item.active .sub-count{color:var(--blue-m);}
+.cat-main{padding-left:16px;}
 
 /* ══════════════════════════════════════════════════════════
    MARKET CARD  —  exact Polymarket clone
@@ -290,32 +301,32 @@ const MARKETS = [
     resolve:"Resolve Sim se nenhum candidato obtiver mais de 50% dos votos validos no 1o turno de 4 de outubro de 2026.",
   },
   {
-    id:"tarcisio2turno", cat:"politica",
+    id:"tarcisio2turno", cat:"politica", sub:"presidencia",
     title:"Tarcisio de Freitas vai ao 2o turno das eleicoes de 2026?",
     deadline:"Out 2026", type:"binary", sim:48, nao:52,
     resolve:"Resolve Sim se Tarcisio de Freitas for um dos dois finalistas do 2o turno presidencial de 2026.",
   },
   {
-    id:"pt100cadeiras", cat:"politica",
+    id:"pt100cadeiras", cat:"politica", sub:"congresso",
     title:"PT conquista mais de 80 cadeiras na Camara dos Deputados em 2026?",
     deadline:"Out 2026", type:"binary", sim:61, nao:39,
     resolve:"Resolve Sim se o PT obtiver mais de 80 vagas na Camara dos Deputados nas eleicoes de 2026.",
   },
   {
-    id:"amnistia", cat:"politica",
+    id:"amnistia", cat:"politica", sub:"congresso",
     title:"Congresso aprova projeto de anistia para presos do 8 de Janeiro antes de out/2026?",
     deadline:"Out 2026", type:"binary", sim:27, nao:73,
     resolve:"Resolve Sim se o Congresso Nacional aprovar e o Presidente sancionar lei de anistia para condenados do 8 de Janeiro antes das eleicoes de outubro de 2026.",
   },
   {
-    id:"lulaaprova", cat:"politica",
+    id:"lulaaprova", cat:"politica", sub:"governo",
     title:"Aprovacao do governo Lula supera 50% nas pesquisas em 2026?",
     deadline:"Dez 2026", type:"binary", sim:33, nao:67,
     resolve:"Resolve Sim se qualquer pesquisa Datafolha ou Quaest registrar aprovacao acima de 50% ao Governo Lula em 2026.",
   },
   /* ── ELEICOES ── */
   {
-    id:"govsp2026", cat:"eleicoes",
+    id:"govsp2026", cat:"eleicoes", sub:"governadores",
     title:"Quem vence o governo de Sao Paulo nas eleicoes de 2026?",
     deadline:"Out 2026",
     type:"multi",
@@ -323,7 +334,7 @@ const MARKETS = [
     resolve:"Resolve com o governador eleito de SP em outubro de 2026.",
   },
   {
-    id:"govmg2026", cat:"eleicoes",
+    id:"govmg2026", cat:"eleicoes", sub:"governadores",
     title:"Quem vence o governo de Minas Gerais em 2026?",
     deadline:"Out 2026",
     type:"multi",
@@ -331,69 +342,69 @@ const MARKETS = [
     resolve:"Resolve com o governador eleito de MG em outubro de 2026.",
   },
   {
-    id:"senado2026", cat:"eleicoes",
+    id:"senado2026", cat:"eleicoes", sub:"senado",
     title:"Oposicao conquista maioria no Senado nas eleicoes de 2026?",
     deadline:"Out 2026", type:"binary", sim:44, nao:56,
     resolve:"Resolve Sim se os partidos de oposicao ao governo Lula obtiverem mais de 41 dos 81 senadores apos o pleito de 2026.",
   },
   /* ── ECONOMIA ── */
   {
-    id:"pib2026", cat:"economia",
+    id:"pib2026", cat:"economia", sub:"macro",
     title:"PIB do Brasil cresce acima de 2,0% em 2026?",
     deadline:"Dez 2026", type:"binary", sim:54, nao:46,
     resolve:"Resolve Sim se o IBGE confirmar crescimento do PIB acima de 2,0% para o ano de 2026.",
   },
   {
-    id:"ipca2026", cat:"economia",
+    id:"ipca2026", cat:"economia", sub:"inflacao",
     title:"Inflacao IPCA de 2026 fica abaixo de 5%?",
     deadline:"Jan 2027", type:"binary", sim:58, nao:42,
     resolve:"Resolve Sim se o IBGE divulgar IPCA acumulado de 2026 inferior a 5,0%.",
   },
   {
-    id:"selic2026", cat:"economia",
+    id:"selic2026", cat:"economia", sub:"juros",
     title:"Selic termina 2026 abaixo de 12% ao ano?",
     deadline:"Dez 2026", type:"binary", sim:41, nao:59,
     resolve:"Resolve Sim se a Selic fixada na ultima reuniao do COPOM de 2026 for inferior a 12,00% a.a.",
   },
   {
-    id:"dolar2026", cat:"economia",
+    id:"dolar2026", cat:"economia", sub:"cambio",
     title:"Dolar fecha acima de R$ 5,80 no ultimo dia util de 2026?",
     deadline:"Dez 2026", type:"binary", sim:49, nao:51,
     resolve:"Resolve Sim se a cotacao PTAX do BC no fechamento de 31/12/2026 for superior a R$ 5,80.",
   },
   {
-    id:"ibov160k", cat:"economia",
+    id:"ibov160k", cat:"economia", sub:"bolsa",
     title:"Ibovespa ultrapassa 160.000 pontos em 2026?",
     deadline:"Dez 2026", type:"binary", sim:46, nao:54,
     resolve:"Resolve Sim se o Ibovespa atingir ou superar 160.000 pontos em qualquer pregao da B3 em 2026.",
   },
   {
-    id:"eumercosul", cat:"economia",
+    id:"eumercosul", cat:"economia", sub:"comercio",
     title:"Acordo UE-Mercosul e ratificado em 2026?",
     deadline:"Dez 2026", type:"binary", sim:52, nao:48,
     resolve:"Resolve Sim se o Acordo de Livre Comercio UE-Mercosul for ratificado por todos os membros e publicado oficialmente ate 31/12/2026.",
   },
   /* ── ESPORTES ── */
   {
-    id:"copagrupos", cat:"esportes",
+    id:"copagrupos", cat:"esportes", sub:"copa2026",
     title:"Brasil passa da fase de grupos na Copa do Mundo 2026?",
     deadline:"Jun 2026", type:"binary", sim:91, nao:9,
     resolve:"Resolve Sim se a Selecao Brasileira se classificar para as oitavas de final da Copa do Mundo FIFA 2026.",
   },
   {
-    id:"copasemi", cat:"esportes",
+    id:"copasemi", cat:"esportes", sub:"copa2026",
     title:"Brasil chega as semifinais da Copa do Mundo 2026?",
     deadline:"Jul 2026", type:"binary", sim:52, nao:48,
     resolve:"Resolve Sim se o Brasil atingir as semifinais da Copa do Mundo FIFA 2026.",
   },
   {
-    id:"copavence", cat:"esportes",
+    id:"copavence", cat:"esportes", sub:"copa2026",
     title:"Brasil e campear da Copa do Mundo 2026?",
     deadline:"Jul 2026", type:"binary", sim:19, nao:81,
     resolve:"Resolve Sim se a Selecao Brasileira vencer a final da Copa do Mundo FIFA 2026.",
   },
   {
-    id:"brasileirao26", cat:"esportes",
+    id:"brasileirao26", cat:"esportes", sub:"futebol",
     title:"Quem vence o Brasileirao Serie A 2026?",
     deadline:"Dez 2026",
     type:"multi",
@@ -401,39 +412,39 @@ const MARKETS = [
     resolve:"Resolve com o campeao oficial do Brasileirao Serie A 2026 conforme a CBF.",
   },
   {
-    id:"libertadores26", cat:"esportes",
+    id:"libertadores26", cat:"esportes", sub:"libertadores",
     title:"Clube brasileiro vence a Copa Libertadores 2026?",
     deadline:"Nov 2026", type:"binary", sim:58, nao:42,
     resolve:"Resolve Sim se o campear da Libertadores 2026 for um clube brasileiro.",
   },
   /* ── TECNOLOGIA ── */
   {
-    id:"iabrasil", cat:"tecnologia",
+    id:"iabrasil", cat:"tecnologia", sub:"ia",
     title:"Brasil sanciona lei federal de regulamentacao de IA em 2026?",
     deadline:"Dez 2026", type:"binary", sim:71, nao:29,
     resolve:"Resolve Sim se o Presidente sancionar lei federal de IA aprovada pelo Congresso ate 31/12/2026.",
   },
   {
-    id:"xbrasil", cat:"tecnologia",
+    id:"xbrasil", cat:"tecnologia", sub:"redes",
     title:"X (Twitter) e banido permanentemente no Brasil em 2026?",
     deadline:"Dez 2026", type:"binary", sim:18, nao:82,
     resolve:"Resolve Sim se o STF ou ANATEL confirmarem bloqueio definitivo do X no Brasil em 2026.",
   },
   {
-    id:"pix5bi", cat:"tecnologia",
+    id:"pix5bi", cat:"tecnologia", sub:"digital",
     title:"PIX ultrapassa 6 bilhoes de transacoes em um mes de 2026?",
     deadline:"Dez 2026", type:"binary", sim:76, nao:24,
     resolve:"Resolve Sim se o Banco Central confirmar mais de 6 bilhoes de transacoes PIX em qualquer mes de 2026.",
   },
   {
-    id:"drex", cat:"tecnologia",
+    id:"drex", cat:"tecnologia", sub:"digital",
     title:"DREX (real digital) e lancado para uso geral da populacao em 2026?",
     deadline:"Dez 2026", type:"binary", sim:63, nao:37,
     resolve:"Resolve Sim se o Banco Central anunciar o lancamento do DREX para uso geral (nao-piloto) em 2026.",
   },
   /* ── ENTRETENIMENTO ── */
   {
-    id:"bbb26", cat:"entretenimento",
+    id:"bbb26", cat:"entretenimento", sub:"tv",
     title:"Quem vence o Big Brother Brasil 26?",
     deadline:"Abr 2026",
     type:"multi",
@@ -441,43 +452,54 @@ const MARKETS = [
     resolve:"Resolve com o vencedor oficial anunciado ao vivo na final do BBB 26 na Globo.",
   },
   {
-    id:"carnaval26", cat:"entretenimento",
+    id:"carnaval26", cat:"entretenimento", sub:"eventos",
     title:"Carnaval do Rio 2026 supera 7 milhoes de turistas?",
     deadline:"Mar 2026", type:"binary", sim:72, nao:28,
     resolve:"Resolve Sim se a Riotur confirmar mais de 7 milhoes de turistas no Carnaval do Rio de Janeiro 2026.",
   },
   {
-    id:"anitta", cat:"entretenimento",
+    id:"anitta", cat:"entretenimento", sub:"musica",
     title:"Anitta ganha Grammy Latino em 2026?",
     deadline:"Nov 2026", type:"binary", sim:38, nao:62,
     resolve:"Resolve Sim se Anitta ganhar alguma categoria no Grammy Latino de 2026.",
   },
   {
-    id:"copa30cop", cat:"entretenimento",
+    id:"copa30cop", cat:"entretenimento", sub:"eventos",
     title:"Copa do Mundo 2026 ultrapassa 6 milhoes de espectadores nos estadios?",
     deadline:"Jul 2026", type:"binary", sim:81, nao:19,
     resolve:"Resolve Sim se a FIFA confirmar mais de 6 milhoes de torcedores nos estadios ao longo da Copa 2026.",
   },
   /* ── CRYPTO ── */
   {
-    id:"btc700k", cat:"crypto",
+    id:"btc700k", cat:"crypto", sub:"bitcoin",
     title:"Bitcoin supera R$ 700.000 em 2026?",
     deadline:"Dez 2026", type:"binary", sim:51, nao:49,
     resolve:"Resolve Sim se o Bitcoin atingir ou superar R$ 700.000 (BTC/BRL) em qualquer exchange de referencia em 2026.",
   },
   {
-    id:"eth20k", cat:"crypto",
+    id:"eth20k", cat:"crypto", sub:"ethereum",
     title:"Ethereum supera R$ 20.000 em 2026?",
     deadline:"Dez 2026", type:"binary", sim:47, nao:53,
     resolve:"Resolve Sim se o Ethereum atingir ou superar R$ 20.000 em qualquer exchange de referencia em 2026.",
   },
   {
-    id:"realdigital", cat:"crypto",
+    id:"realdigital", cat:"crypto", sub:"regulacao",
     title:"Volume de stablecoins no Brasil supera R$ 500 bi em 2026?",
     deadline:"Dez 2026", type:"binary", sim:44, nao:56,
     resolve:"Resolve Sim se o Banco Central confirmar volume total de stablecoins circulando no Brasil acima de R$ 500 bilhoes em 2026.",
   },
 ];
+
+/* ─── SUBCATEGORIES ─── */
+const SUBCATS = {
+  politica:       [{id:"all",l:"Todos"},{id:"presidencia",l:"Presidencia"},{id:"congresso",l:"Congresso"},{id:"governo",l:"Governo"}],
+  eleicoes:       [{id:"all",l:"Todos"},{id:"governadores",l:"Governadores"},{id:"senado",l:"Senado"}],
+  esportes:       [{id:"all",l:"Todos"},{id:"copa2026",l:"Copa 2026"},{id:"futebol",l:"Futebol"},{id:"libertadores",l:"Libertadores"}],
+  economia:       [{id:"all",l:"Todos"},{id:"macro",l:"Macro"},{id:"juros",l:"Juros / Selic"},{id:"cambio",l:"Cambio"},{id:"bolsa",l:"Bolsa"},{id:"inflacao",l:"Inflacao"},{id:"comercio",l:"Comercio"}],
+  tecnologia:     [{id:"all",l:"Todos"},{id:"ia",l:"Inteligencia Artificial"},{id:"digital",l:"Moeda Digital"},{id:"redes",l:"Redes Sociais"}],
+  entretenimento: [{id:"all",l:"Todos"},{id:"tv",l:"TV / Realities"},{id:"musica",l:"Musica"},{id:"eventos",l:"Eventos"}],
+  crypto:         [{id:"all",l:"Todos"},{id:"bitcoin",l:"Bitcoin"},{id:"ethereum",l:"Ethereum"},{id:"regulacao",l:"Regulacao"}],
+};
 
 /* ─── AUTH CONTEXT ─── */
 const AuthCtx = createContext(null);
@@ -612,22 +634,27 @@ function Comments({marketId}){
 }
 
 /* ─── MARKET MODAL ─── */
-function MarketModal({market,initMode,onClose,showToast}){
+function MarketModal({market,initMode,initOption,onClose,showToast}){
   const {user,coins,placeBet}=useAuth();
   const [mode,setMode]=useState(initMode||null);
+  const [selOpt,setSelOpt]=useState(initOption||null); // for multi: which option is selected
   const [amount,setAmount]=useState("");
   const [betErr,setBetErr]=useState("");
   const amt=parseInt(amount)||0;
-  const modePct=mode==="sim"?market.sim:mode==="nao"?market.nao:null;
+  const modePct=market.type==="binary"
+    ?(mode==="sim"?market.sim:mode==="nao"?market.nao:null)
+    :(selOpt?selOpt.pct:null);
   const potRet=modePct&&amt>0?Math.floor(amt/(modePct/100)):null;
   const cfg=CATCFG[market.cat]||CATCFG.politica;
 
   const doBet=()=>{
     setBetErr("");
+    if(market.type==="multi"&&!selOpt){setBetErr("Selecione uma opcao primeiro.");return;}
     if(!mode){setBetErr("Selecione Sim ou Nao.");return;}
-    const err=placeBet(market.id,mode,amt);
+    const posLabel=market.type==="multi"?`${selOpt.label} — ${mode==="sim"?"Sim":"Nao"}`:mode==="sim"?"Sim":"Nao";
+    const err=placeBet(market.id,posLabel,amt);
     if(err){setBetErr(err);return;}
-    showToast(`Aposta confirmada! ${amt} moedas em ${mode==="sim"?"Sim":"Nao"}.`); onClose();
+    showToast(`Aposta confirmada! ${amt} moedas em ${posLabel}.`); onClose();
   };
 
   return(
@@ -644,7 +671,7 @@ function MarketModal({market,initMode,onClose,showToast}){
             <span className="tag tag-g">Encerra {market.deadline}</span>
           </div>
 
-          {/* probabilities */}
+          {/* probabilities — for multi, clicking a row selects the option */}
           <div>
             <div className="slabel">Probabilidades atuais</div>
             {market.type==="binary"?(
@@ -657,30 +684,44 @@ function MarketModal({market,initMode,onClose,showToast}){
                 ))}
               </div>
             ):(
-              <div style={{display:"flex",flexDirection:"column",gap:6}}>
+              <div style={{display:"flex",flexDirection:"column",gap:4}}>
                 {market.opts.map((o,i)=>(
-                  <div key={i} style={{display:"flex",alignItems:"center",gap:10}}>
-                    <span style={{fontSize:12.5,fontWeight:400,width:180,flexShrink:0}}>{o.label}</span>
+                  <div key={i}
+                    onClick={()=>{setSelOpt(o);setBetErr("");}}
+                    style={{
+                      display:"flex",alignItems:"center",gap:10,padding:"7px 10px",
+                      borderRadius:"var(--r-sm)",cursor:"pointer",transition:"background .12s",
+                      background:selOpt?.label===o.label?"var(--blue-l)":"transparent",
+                      border:`1.5px solid ${selOpt?.label===o.label?"var(--blue-m)":"transparent"}`,
+                    }}>
+                    <span style={{fontSize:12.5,width:180,flexShrink:0}}>{o.label}</span>
                     <div style={{flex:1,height:4,background:"var(--border)",borderRadius:2,overflow:"hidden"}}>
                       <div style={{width:`${o.pct}%`,height:"100%",background:"var(--blue)",borderRadius:2}}/>
                     </div>
                     <span style={{fontSize:12.5,fontWeight:600,color:"var(--blue)",width:34,textAlign:"right",flexShrink:0}}>{o.pct}%</span>
+                    <div style={{display:"flex",gap:4,flexShrink:0}}>
+                      <button className="opt-yes" style={{fontSize:11,padding:"2px 7px"}}
+                        onClick={e=>{e.stopPropagation();setSelOpt(o);setMode("sim");setBetErr("");}}>Sim</button>
+                      <button className="opt-no" style={{fontSize:11,padding:"2px 7px"}}
+                        onClick={e=>{e.stopPropagation();setSelOpt(o);setMode("nao");setBetErr("");}}>Nao</button>
+                    </div>
                   </div>
                 ))}
+                {selOpt&&<div style={{fontSize:11.5,color:"var(--blue)",marginTop:2}}>Opcao selecionada: <strong>{selOpt.label}</strong></div>}
               </div>
             )}
           </div>
 
           {/* bet */}
           <div className="bet-box">
-            <div className="slabel">Fazer uma aposta</div>
+            <div className="slabel">Fazer uma aposta{selOpt?` em ${selOpt.label}`:""}</div>
             {user&&<div className="bet-avail"><div className="cdot"/>Disponivel: <strong>{coins.toLocaleString("pt-BR")} moedas</strong></div>}
             <div className="bet-toggle">
               <button className={`bbt sim${mode==="sim"?" sel":""}`} onClick={()=>{setMode("sim");setBetErr("");}}>
-                Sim {market.type==="binary"?`(${market.sim}%)`:""}
+                Sim {market.type==="binary"?`(${market.sim}%)`:selOpt?`(${selOpt.pct}%)`:""}
               </button>
               <button className={`bbt nao${mode==="nao"?" sel":""}`} onClick={()=>{setMode("nao");setBetErr("");}}>
-                Nao {market.type==="binary"?`(${market.nao}%)`:""}
+                Nao {market.type==="binary"?`(${market.nao}%)`:selOpt?`(${100-selOpt.pct}%)`:""}
               </button>
             </div>
             <div className="slabel" style={{marginBottom:4}}>Quantidade de moedas</div>
@@ -693,8 +734,11 @@ function MarketModal({market,initMode,onClose,showToast}){
             )}
             {betErr&&<div className="bet-err">{betErr}</div>}
             {user?(
-              <button className={`bet-sub${mode?" "+mode:" none"}`} onClick={doBet}>
-                {mode?`Apostar ${amt||0} moedas em ${mode==="sim"?"Sim":"Nao"}`:"Selecione Sim ou Nao"}
+              <button className={`bet-sub${mode?" "+mode:" none"}`} onClick={doBet}
+                style={{background: !mode||(!selOpt&&market.type==="multi") ? "var(--border2)" : mode==="sim"?"var(--green)":"var(--red)"}}>
+                {!mode?"Selecione Sim ou Nao"
+                  :market.type==="multi"&&!selOpt?"Selecione uma opcao acima"
+                  :`Apostar ${amt||0} moedas em ${mode==="sim"?"Sim":"Nao"}${selOpt?` — ${selOpt.label}`:""}`}
               </button>
             ):(
               <div className="bet-login">Faca login para apostar neste mercado.</div>
@@ -728,8 +772,10 @@ function MarketCard({market,onOpen,showToast}){
     showToast(toggleSave(market.id)?"Mercado salvo.":"Removido dos salvos.");
   };
 
+  const openWith=(mode, opt=null)=>onOpen(market, mode, opt);
+
   return(
-    <div className="mcard" onClick={()=>onOpen(market,null)}>
+    <div className="mcard" onClick={()=>openWith(null,null)}>
       <div className="mcard-top">
         <div className="mcard-ico" style={{background:cfg.bg,color:cfg.fg}}><cfg.I/></div>
         <div className="mcard-title">{market.title}</div>
@@ -739,8 +785,8 @@ function MarketCard({market,onOpen,showToast}){
           <div className="opt-row" key={i}>
             <span className="opt-name">{o.label}</span>
             <span className="opt-pct">{o.pct}%</span>
-            <button className="opt-yes" onClick={e=>{e.stopPropagation();onOpen(market,"sim");}}>Sim</button>
-            <button className="opt-no"  onClick={e=>{e.stopPropagation();onOpen(market,"nao");}}>Nao</button>
+            <button className="opt-yes" onClick={e=>{e.stopPropagation();openWith("sim", market.type==="multi"?o:null);}}>Sim</button>
+            <button className="opt-no"  onClick={e=>{e.stopPropagation();openWith("nao", market.type==="multi"?o:null);}}>Nao</button>
           </div>
         ))}
       </div>
@@ -749,7 +795,7 @@ function MarketCard({market,onOpen,showToast}){
         {bet ? (
           <div className="bet-badge">
             <svg width="6" height="6" viewBox="0 0 6 6"><circle cx="3" cy="3" r="3"/></svg>
-            {bet.position==="sim"?"Sim":"Nao"} · {bet.amount.toLocaleString("pt-BR")} moedas
+            {bet.position.includes("Sim")?"Sim":"Nao"} · {bet.amount.toLocaleString("pt-BR")} moedas
           </div>
         ) : <span style={{flex:1}}/>}
         <button className={`mcard-save${sv?" sv":""}`} onClick={handleSave}><Ico.Bookmark f={sv}/></button>
@@ -860,61 +906,99 @@ function CatBar({active,setActive}){
 /* ─── PAGE: MARKETS ─── */
 function MarketsPage({showToast}){
   const [cat,setCat]=useState("todos");
-  const [open,setOpen]=useState(null);
-  const featured=MARKETS.find(m=>m.featured);
-  const filtered=MARKETS.filter(m=>!m.featured&&(cat==="todos"||m.cat===cat));
+  const [sub,setSub]=useState("all");
+  const [open,setOpen]=useState(null); // {market, mode, option}
 
-  // Featured also as card
-  const featuredAsCard = (cat==="todos"||cat===featured?.cat) && featured;
+  const handleCatChange=(newCat)=>{ setCat(newCat); setSub("all"); };
+
+  const featured=MARKETS.find(m=>m.featured);
+
+  // compute subcategory counts for current cat
+  const catMarkets=MARKETS.filter(m=>!m.featured&&m.cat===cat);
+  const subcats=cat!=="todos"&&SUBCATS[cat]
+    ? SUBCATS[cat].map(s=>({
+        ...s,
+        count: s.id==="all" ? catMarkets.length : catMarkets.filter(m=>m.sub===s.id).length
+      })).filter(s=>s.id==="all"||s.count>0)
+    : null;
+
+  const filtered=MARKETS.filter(m=>{
+    if(m.featured) return false;
+    if(cat==="todos") return true;
+    if(m.cat!==cat) return false;
+    if(sub==="all") return true;
+    return m.sub===sub;
+  });
+
+  const showFeatured=(cat==="todos"||cat===featured?.cat)&&(sub==="all");
+
+  const openModal=(market,mode,opt=null)=>setOpen({market,mode,option:opt});
+
+  const Grid=()=>(
+    <>
+      {showFeatured&&featured&&(
+        <div style={{marginBottom:10}}>
+          <div className="sec-hd"><div className="sec-title">Destaque</div></div>
+          <div className="mcard" onClick={()=>openModal(featured,null)}>
+            <div className="mcard-top">
+              <div className="mcard-ico" style={{background:CATCFG.politica.bg,color:CATCFG.politica.fg,width:42,height:42,borderRadius:10}}><Ico.Building/></div>
+              <div className="mcard-title" style={{fontSize:14,fontWeight:600}}>{featured.title}</div>
+            </div>
+            <div className="mcard-opts">
+              {featured.opts.map((o,i)=>(
+                <div className="opt-row" key={i}>
+                  <span className="opt-name">{o.label}</span>
+                  <span className="opt-pct">{o.pct}%</span>
+                  <button className="opt-yes" onClick={e=>{e.stopPropagation();openModal(featured,"sim",o);}}>Sim</button>
+                  <button className="opt-no"  onClick={e=>{e.stopPropagation();openModal(featured,"nao",o);}}>Nao</button>
+                </div>
+              ))}
+            </div>
+            <div className="mcard-foot"><span className="mcard-vol">Enc. {featured.deadline}</span></div>
+          </div>
+        </div>
+      )}
+      <div className="sec-hd">
+        <div className="sec-title">{cat==="todos"?"Em Alta":CATS.find(c=>c.id===cat)?.l||cat}</div>
+        <button className="sec-link">Ver todos</button>
+      </div>
+      {filtered.length===0?(
+        <div className="empty">
+          <div className="empty-ico"><Ico.Chart/></div>
+          <div className="empty-t">Nenhum mercado nesta subcategoria</div>
+        </div>
+      ):(
+        <div className="grid">
+          {filtered.map(m=><MarketCard key={m.id} market={m} onOpen={openModal} showToast={showToast}/>)}
+        </div>
+      )}
+    </>
+  );
 
   return(
     <>
-      <CatBar active={cat} setActive={setCat}/>
+      <CatBar active={cat} setActive={handleCatChange}/>
       <div className="page">
-        {/* featured card — same design as normal cards but full-width */}
-        {featuredAsCard&&(
-          <div style={{marginBottom:10}}>
-            <div className="sec-hd"><div className="sec-title">Destaque</div></div>
-            <div className="mcard" style={{maxWidth:"100%",position:"relative"}} onClick={()=>setOpen({market:featured,mode:null})}>
-              <div className="mcard-top">
-                <div className="mcard-ico" style={{background:CATCFG.politica.bg,color:CATCFG.politica.fg,width:42,height:42,borderRadius:10}}><Ico.Building/></div>
-                <div className="mcard-title" style={{fontSize:14,fontWeight:600}}>{featured.title}</div>
-              </div>
-              <div className="mcard-opts">
-                {featured.opts.map((o,i)=>(
-                  <div className="opt-row" key={i}>
-                    <span className="opt-name">{o.label}</span>
-                    <span className="opt-pct">{o.pct}%</span>
-                    <button className="opt-yes" onClick={e=>{e.stopPropagation();setOpen({market:featured,mode:"sim"});}}>Sim</button>
-                    <button className="opt-no"  onClick={e=>{e.stopPropagation();setOpen({market:featured,mode:"nao"});}}>Nao</button>
-                  </div>
-                ))}
-              </div>
-              <div className="mcard-foot">
-                <span className="mcard-vol">Enc. {featured.deadline}</span>
-              </div>
+        {subcats ? (
+          <div className="cat-layout">
+            {/* SIDEBAR */}
+            <div className="cat-sidebar">
+              <div className="cat-sidebar-title">{CATS.find(c=>c.id===cat)?.l||cat}</div>
+              {subcats.map(s=>(
+                <button key={s.id} className={`sub-item${sub===s.id?" active":""}`} onClick={()=>setSub(s.id)}>
+                  <span>{s.l}</span>
+                  <span className="sub-count">{s.count}</span>
+                </button>
+              ))}
             </div>
-          </div>
-        )}
-
-        <div className="sec-hd">
-          <div className="sec-title">Em Alta</div>
-          <button className="sec-link">Ver todos</button>
-        </div>
-
-        {filtered.length===0?(
-          <div className="empty">
-            <div className="empty-ico"><Ico.Chart/></div>
-            <div className="empty-t">Nenhum mercado nesta categoria</div>
-            <div className="empty-s">Novos mercados sao adicionados frequentemente.</div>
+            {/* MAIN */}
+            <div className="cat-main"><Grid/></div>
           </div>
         ):(
-          <div className="grid">
-            {filtered.map(m=><MarketCard key={m.id} market={m} onOpen={(mkt,mode)=>setOpen({market:mkt,mode})} showToast={showToast}/>)}
-          </div>
+          <Grid/>
         )}
       </div>
-      {open&&<MarketModal market={open.market} initMode={open.mode} onClose={()=>setOpen(null)} showToast={showToast}/>}
+      {open&&<MarketModal market={open.market} initMode={open.mode} initOption={open.option} onClose={()=>setOpen(null)} showToast={showToast}/>}
     </>
   );
 }
