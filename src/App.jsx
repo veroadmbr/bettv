@@ -222,10 +222,9 @@ textarea.fi{resize:vertical;min-height:74px;}
 .fbtn:hover{border-color:var(--blue);color:var(--blue);}
 .fbtn.active{background:var(--navy);border-color:var(--navy);color:#fff;font-weight:600;}
 
-/* bet badge on card */
-.bet-badge{position:absolute;top:10px;left:10px;display:flex;align-items:center;gap:4px;padding:3px 8px 3px 6px;border-radius:20px;font-size:10.5px;font-weight:700;pointer-events:none;line-height:1;}
-.bet-badge.sim{background:rgba(22,163,74,.88);color:#fff;}
-.bet-badge.nao{background:rgba(220,38,38,.88);color:#fff;}
+/* bet badge — no footer, brand blue */
+.bet-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px 3px 7px;border-radius:6px;font-size:10.5px;font-weight:700;line-height:1.5;background:var(--blue-l);color:var(--blue);border:1.5px solid var(--blue-m);}
+.bet-badge circle{fill:var(--blue);}
 
 ::-webkit-scrollbar{width:4px;height:4px;}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
@@ -730,13 +729,7 @@ function MarketCard({market,onOpen,showToast}){
   };
 
   return(
-    <div className="mcard" style={{position:"relative"}} onClick={()=>onOpen(market,null)}>
-      {bet&&(
-        <div className={`bet-badge ${bet.position}`}>
-          <svg width="6" height="6" viewBox="0 0 6 6"><circle cx="3" cy="3" r="3" fill="rgba(255,255,255,.7)"/></svg>
-          {bet.position==="sim"?"Sim":"Nao"} · {bet.amount.toLocaleString("pt-BR")} moedas
-        </div>
-      )}
+    <div className="mcard" onClick={()=>onOpen(market,null)}>
       <div className="mcard-top">
         <div className="mcard-ico" style={{background:cfg.bg,color:cfg.fg}}><cfg.I/></div>
         <div className="mcard-title">{market.title}</div>
@@ -753,6 +746,12 @@ function MarketCard({market,onOpen,showToast}){
       </div>
       <div className="mcard-foot">
         <span className="mcard-vol">Enc. {market.deadline}</span>
+        {bet ? (
+          <div className="bet-badge">
+            <svg width="6" height="6" viewBox="0 0 6 6"><circle cx="3" cy="3" r="3"/></svg>
+            {bet.position==="sim"?"Sim":"Nao"} · {bet.amount.toLocaleString("pt-BR")} moedas
+          </div>
+        ) : <span style={{flex:1}}/>}
         <button className={`mcard-save${sv?" sv":""}`} onClick={handleSave}><Ico.Bookmark f={sv}/></button>
       </div>
     </div>
