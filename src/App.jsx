@@ -233,9 +233,76 @@ textarea.fi{resize:vertical;min-height:74px;}
 .fbtn:hover{border-color:var(--blue);color:var(--blue);}
 .fbtn.active{background:var(--navy);border-color:var(--navy);color:#fff;font-weight:600;}
 
-/* bet badge — no footer, brand blue */
+/* bet badge — footer, brand blue */
 .bet-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px 3px 7px;border-radius:6px;font-size:10.5px;font-weight:700;line-height:1.5;background:var(--blue-l);color:var(--blue);border:1.5px solid var(--blue-m);}
 .bet-badge circle{fill:var(--blue);}
+
+/* ── MOBILE DRAWER ── */
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.42);z-index:300;animation:bFade .18s ease;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:72%;max-width:300px;background:var(--white);z-index:301;display:flex;flex-direction:column;animation:slideIn .22s ease;}
+@keyframes slideIn{from{transform:translateX(100%)}to{transform:none}}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);}
+.drawer-close{background:none;border:none;color:var(--text2);font-size:20px;line-height:1;padding:2px;}
+.drawer-nav{display:flex;flex-direction:column;padding:12px 0;}
+.drawer-nav-btn{padding:13px 20px;font-size:14px;font-weight:500;color:var(--text2);background:none;border:none;text-align:left;transition:background .12s,color .12s;border-left:3px solid transparent;}
+.drawer-nav-btn:hover{background:var(--bg);color:var(--text);}
+.drawer-nav-btn.active{color:var(--blue);border-left-color:var(--blue);background:var(--blue-l);font-weight:600;}
+.drawer-footer{padding:16px 20px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:8px;margin-top:auto;}
+.hamburger{display:none;background:none;border:none;color:var(--text2);padding:4px;border-radius:6px;}
+
+/* ── MOBILE BOTTOM NAV ── */
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:56px;background:var(--white);border-top:1px solid var(--border);z-index:100;padding:0 4px;}
+.bottom-nav-in{display:flex;height:100%;}
+.bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;color:var(--text3);font-size:10.5px;font-weight:500;transition:color .12s;}
+.bnav-btn.active{color:var(--blue);}
+.bnav-btn svg{width:20px;height:20px;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:960px){
+  .grid{grid-template-columns:repeat(2,1fr);}
+  .rank-info-grid{grid-template-columns:repeat(2,1fr);}
+  .pg{grid-template-columns:1fr;}
+  .frow2{grid-template-columns:1fr;}
+  .cat-layout{grid-template-columns:1fr;}
+  .cat-sidebar{display:none;}
+  .cat-main{padding-left:0;}
+  /* show subcats as horizontal scroll pills */
+  .sub-pills-wrap{display:flex;overflow-x:auto;scrollbar-width:none;gap:6px;margin-bottom:14px;padding-bottom:2px;}
+  .sub-pills-wrap::-webkit-scrollbar{display:none;}
+}
+@media(max-width:640px){
+  .hd-in{padding:0 14px;height:50px;}
+  .hd-nav{display:none;}
+  .hamburger{display:flex;align-items:center;justify-content:center;}
+  /* hide text labels in right section on mobile */
+  .coins-chip .coins-label{display:none;}
+  .user-pill .user-name{display:none;}
+  .user-pill{padding:3px;}
+  .btn-ghost.login-btn,.btn-blue.reg-btn{display:none;}
+  .mobile-auth-btns{display:flex;gap:6px;}
+
+  .cat-in{padding:0 12px;}
+  .page{padding:14px 12px 80px;}
+  .page-title{font-size:17px;}
+
+  .grid{grid-template-columns:1fr;}
+  .rank-info-grid{grid-template-columns:1fr;}
+
+  /* modal full-screen on mobile */
+  .bd{padding:0;align-items:flex-end;}
+  .modal{border-radius:16px 16px 0 0;max-height:94vh;max-width:100%;}
+  .modal-sm{border-radius:16px 16px 0 0;max-width:100%;}
+
+  .bottom-nav{display:block;}
+  .toast{bottom:70px;left:12px;right:12px;text-align:center;}
+
+  .page-title-row{margin-bottom:16px;}
+  .cat-bar{top:50px;}
+}
+@media(min-width:961px){
+  .sub-pills-wrap{display:none;}
+  .mobile-auth-btns{display:none;}
+}
 
 ::-webkit-scrollbar{width:4px;height:4px;}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
@@ -857,34 +924,97 @@ function RegisterModal({onClose,onSwitch,showToast}){
 /* ─── HEADER ─── */
 function Header({page,setPage,onLogin,onRegister,showToast}){
   const {user,coins,logout}=useAuth();
+  const [drawerOpen,setDrawerOpen]=useState(false);
+  const closeDrawer=()=>setDrawerOpen(false);
+  const navTo=(p)=>{ setPage(p); closeDrawer(); };
+
+  const NavLinks=({mobile})=>(
+    <>
+      {[{id:"markets",l:"Mercados"},{id:"ranking",l:"Ranking"}].map(n=>(
+        mobile
+          ? <button key={n.id} className={`drawer-nav-btn${page===n.id?" active":""}`} onClick={()=>navTo(n.id)}>{n.l}</button>
+          : <button key={n.id} className={`nav-btn${page===n.id?" active":""}`} onClick={()=>setPage(n.id)}>{n.l}</button>
+      ))}
+    </>
+  );
+
   return(
-    <header className="hd">
-      <div className="hd-in">
-        <button className="logo-btn" onClick={()=>setPage("markets")}><Logo/></button>
-        <nav className="hd-nav">
-          {[{id:"markets",l:"Mercados"},{id:"ranking",l:"Ranking"}].map(n=>(
-            <button key={n.id} className={`nav-btn${page===n.id?" active":""}`} onClick={()=>setPage(n.id)}>{n.l}</button>
-          ))}
-        </nav>
-        <div className="hd-right">
-          <button style={{width:32,height:32,borderRadius:"var(--r-sm)",border:"1.5px solid var(--border2)",background:"var(--white)",display:"flex",alignItems:"center",justifyContent:"center",color:"var(--text2)"}} onClick={()=>showToast("Busca em breve.")}>
-            <Ico.Search/>
-          </button>
-          {user?(
-            <div style={{display:"flex",alignItems:"center",gap:7}}>
-              <div className="coins-chip"><div className="cdot"/>{coins.toLocaleString("pt-BR")} moedas</div>
-              <button className="user-pill" onClick={()=>setPage("profile")}>
-                <div className="av-sm">{user.avatar?<img src={user.avatar} alt=""/>:initials(user.name)}</div>
-                <span style={{fontSize:12.5,fontWeight:500}}>{user.name.split(" ")[0]}</span>
-              </button>
-              <button className="btn-ghost" onClick={()=>{logout();showToast("Ate logo!");}}>Sair</button>
-            </div>
-          ):(
-            <><button className="btn-ghost" onClick={onLogin}>Login</button><button className="btn-blue" onClick={onRegister}>Cadastrar-se</button></>
-          )}
+    <>
+      <header className="hd">
+        <div className="hd-in">
+          <button className="logo-btn" onClick={()=>setPage("markets")}><Logo/></button>
+          {/* Desktop nav */}
+          <nav className="hd-nav"><NavLinks mobile={false}/></nav>
+
+          <div className="hd-right">
+            <button style={{width:32,height:32,borderRadius:"var(--r-sm)",border:"1.5px solid var(--border2)",background:"var(--white)",display:"flex",alignItems:"center",justifyContent:"center",color:"var(--text2)"}} onClick={()=>showToast("Busca em breve.")}>
+              <Ico.Search/>
+            </button>
+            {user?(
+              <div style={{display:"flex",alignItems:"center",gap:6}}>
+                <div className="coins-chip">
+                  <div className="cdot"/>
+                  <span className="coins-label">{coins.toLocaleString("pt-BR")} moedas</span>
+                  {/* mobile: show only number */}
+                  <span style={{display:"none"}} className="coins-mobile">{coins.toLocaleString("pt-BR")}</span>
+                </div>
+                <button className="user-pill" onClick={()=>setPage("profile")}>
+                  <div className="av-sm">{user.avatar?<img src={user.avatar} alt=""/>:initials(user.name)}</div>
+                  <span className="user-name" style={{fontSize:12.5,fontWeight:500}}>{user.name.split(" ")[0]}</span>
+                </button>
+                <button className="btn-ghost" style={{fontSize:12.5,padding:"5px 11px"}} onClick={()=>{logout();showToast("Ate logo!");}}>Sair</button>
+              </div>
+            ):(
+              <>
+                <button className="btn-ghost login-btn" onClick={onLogin}>Login</button>
+                <button className="btn-blue reg-btn" onClick={onRegister}>Cadastrar-se</button>
+                {/* mobile: compact auth */}
+                <div className="mobile-auth-btns">
+                  <button className="btn-ghost" style={{fontSize:12.5,padding:"5px 11px"}} onClick={onLogin}>Login</button>
+                  <button className="btn-blue"  style={{fontSize:12.5,padding:"5px 11px"}} onClick={onRegister}>Entrar</button>
+                </div>
+              </>
+            )}
+            {/* Hamburger — mobile only */}
+            <button className="hamburger" onClick={()=>setDrawerOpen(true)} aria-label="Menu">
+              <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+              </svg>
+            </button>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+
+      {/* Mobile drawer */}
+      {drawerOpen&&(
+        <>
+          <div className="drawer-overlay" onClick={closeDrawer}/>
+          <div className="drawer">
+            <div className="drawer-head">
+              <Logo/>
+              <button className="drawer-close" onClick={closeDrawer}>✕</button>
+            </div>
+            <div className="drawer-nav">
+              <NavLinks mobile={true}/>
+              {user&&<button className="drawer-nav-btn" onClick={()=>navTo("profile")}>Meu Perfil</button>}
+            </div>
+            {user?(
+              <div className="drawer-footer">
+                <div style={{display:"flex",alignItems:"center",gap:6,fontSize:13,fontWeight:600}}>
+                  <div className="cdot"/>{coins.toLocaleString("pt-BR")} moedas
+                </div>
+                <button className="btn-ghost" style={{width:"100%"}} onClick={()=>{logout();closeDrawer();showToast("Ate logo!");}}>Sair da conta</button>
+              </div>
+            ):(
+              <div className="drawer-footer">
+                <button className="btn-blue" style={{width:"100%"}} onClick={()=>{onRegister();closeDrawer();}}>Cadastrar-se</button>
+                <button className="btn-ghost" style={{width:"100%"}} onClick={()=>{onLogin();closeDrawer();}}>Login</button>
+              </div>
+            )}
+          </div>
+        </>
+      )}
+    </>
   );
 }
 
@@ -936,6 +1066,18 @@ function MarketsPage({showToast}){
 
   const Grid=()=>(
     <>
+      {/* Mobile horizontal subcategory pills (visible only on tablet/mobile via CSS) */}
+      {subcats&&subcats.length>1&&(
+        <div className="sub-pills-wrap">
+          {subcats.map(s=>(
+            <button key={s.id} className={`cat-pill${sub===s.id?" active":""}`}
+              style={{flexShrink:0,border:"1.5px solid var(--border2)"}}
+              onClick={()=>setSub(s.id)}>
+              {s.l} <span style={{fontSize:11,opacity:.7}}>({s.count})</span>
+            </button>
+          ))}
+        </div>
+      )}
       {showFeatured&&featured&&(
         <div style={{marginBottom:10}}>
           <div className="sec-hd"><div className="sec-title">Destaque</div></div>
@@ -1148,6 +1290,20 @@ export default function App(){
       {modal==="login"   &&<LoginModal    onClose={()=>setModal(null)} onSwitch={()=>setModal("register")} showToast={showToast}/>}
       {modal==="register"&&<RegisterModal onClose={()=>setModal(null)} onSwitch={()=>setModal("login")}    showToast={showToast}/>}
       {msg&&<div className="toast">{msg}</div>}
+      {/* Mobile bottom nav */}
+      <nav className="bottom-nav">
+        <div className="bottom-nav-in">
+          {[
+            {id:"markets", label:"Mercados", Icon:()=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>},
+            {id:"ranking",  label:"Ranking",  Icon:()=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>},
+            {id:"profile",  label:"Perfil",   Icon:()=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>},
+          ].map(n=>(
+            <button key={n.id} className={`bnav-btn${page===n.id?" active":""}`} onClick={()=>setPage(n.id)}>
+              <n.Icon/>{n.label}
+            </button>
+          ))}
+        </div>
+      </nav>
     </AuthProvider>
   );
 }
