@@ -115,9 +115,6 @@ input,textarea,select{font-family:inherit;}
 
 .sec-label{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--text3);margin-bottom:6px;}
 
-.chart-box{background:var(--bg);border:1px solid var(--border);border-radius:9px;height:120px;position:relative;overflow:hidden;}
-.chart-label{font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text3);padding:10px 12px 4px;}
-
 .prob-binary{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:280px;}
 .prob-box{border-radius:9px;padding:12px 10px;text-align:center;}
 .prob-box.yes{background:var(--green-bg);border:1.5px solid var(--green-bd);}
@@ -517,29 +514,6 @@ function CardImgInner({ src, credit }) {
   );
 }
 
-/* ─── SPARKLINE ─────────────────────────────────────────── */
-function Sparkline({ base }) {
-  const pts = Array.from({length:30},(_,i)=>Math.max(4,Math.min(96,base+Math.sin(i/3)*(Math.random()*7)+(Math.random()-.5)*5)));
-  const W=640,H=76,p=6;
-  const xs=pts.map((_,i)=>p+i*(W-p*2)/29);
-  const ys=pts.map(v=>p+(1-v/100)*(H-p*2));
-  const path=xs.map((x,i)=>`${i?"L":"M"}${x},${ys[i]}`).join(" ");
-  const area=`${path} L${xs[29]},${H-p} L${xs[0]},${H-p} Z`;
-  return (
-    <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" style={{position:"absolute",inset:0,width:"100%",height:"100%"}}>
-      <defs>
-        <linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#2E5CFF" stopOpacity=".12"/>
-          <stop offset="100%" stopColor="#2E5CFF" stopOpacity="0"/>
-        </linearGradient>
-      </defs>
-      <path d={area} fill="url(#sg)"/>
-      <path d={path} stroke="#2E5CFF" strokeWidth="2" fill="none"/>
-      <circle cx={xs[29]} cy={ys[29]} r="4" fill="#2E5CFF"/>
-    </svg>
-  );
-}
-
 /* ─── COMMENTS SECTION ──────────────────────────────────── */
 function Comments({ marketId }) {
   const { user } = useAuth();
@@ -594,7 +568,6 @@ function MarketModal({ market, initMode, onClose, showToast }) {
   const [amount, setAmount] = useState("");
   const [betErr, setBetErr] = useState("");
 
-  const base = market.type==="binary" ? market.sim : market.opts[0].pct;
   const modePct = mode==="sim" ? market.sim : mode==="nao" ? market.nao : null;
   const amt = parseInt(amount)||0;
   const potReturn = modePct && amt>0 ? Math.floor(amt/(modePct/100)) : null;
@@ -627,12 +600,6 @@ function MarketModal({ market, initMode, onClose, showToast }) {
           <div className="tags">
             <span className="tag tag-blue">{market.cat.charAt(0).toUpperCase()+market.cat.slice(1)}</span>
             <span className="tag tag-gray">Encerra {market.deadline}</span>
-          </div>
-
-          {/* CHART */}
-          <div className="chart-box">
-            <div className="chart-label">Historico de probabilidade (30 dias)</div>
-            <Sparkline base={base}/>
           </div>
 
           {/* PROBABILITIES */}
